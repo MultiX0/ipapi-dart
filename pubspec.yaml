@@ -1,7 +1,7 @@
 name: ipapi_dart
 description: A starting point for Dart libraries or applications.
 version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+homepage: https://github.com/MultiX0/ipapi-dart
 
 environment:
   sdk: ^3.7.0
