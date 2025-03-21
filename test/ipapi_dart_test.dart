@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:ipapi_dart/ipapi_dart.dart';
 import 'package:mockito/mockito.dart';
@@ -43,9 +42,9 @@ void main() {
         },
       };
 
-      // Mock response
+      // Mock response - don't encode the data
       final response = Response(
-        data: jsonEncode(responseData),
+        data: responseData,
         statusCode: 200,
         requestOptions: RequestOptions(path: ''),
       );
@@ -80,15 +79,15 @@ void main() {
     });
 
     test('QueryOwnIP returns IP string on successful API call', () async {
-      // Sample response for own IP
+      // Sample response for own IP - using the correct URL with trailing slash
       final response = Response(
-        data: jsonEncode("1.1.1.1"),
+        data: "1.1.1.1", // Plain string, not JSON encoded
         statusCode: 200,
         requestOptions: RequestOptions(path: ''),
       );
 
-      // Set up the mock
-      when(mockDio.get('https://api.ipquery.io')).thenAnswer((_) async => response);
+      // Set up the mock with the correct URL
+      when(mockDio.get('https://api.ipquery.io/')).thenAnswer((_) async => response);
 
       // Call the method
       final result = await IPInfo.QueryOwnIP();
@@ -98,8 +97,8 @@ void main() {
     });
 
     test('QueryOwnIP throws exception on API error', () async {
-      // Mock a failed response
-      when(mockDio.get('https://api.ipquery.io')).thenThrow(
+      // Mock a failed response - with correct URL
+      when(mockDio.get('https://api.ipquery.io/')).thenThrow(
         DioException(
           requestOptions: RequestOptions(path: ''),
           error: 'API Error',
